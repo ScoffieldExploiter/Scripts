@@ -1,3 +1,4 @@
+#coding: utf-8
 # Script criado para fins de estudos...
 alpha_lower = [x for x in "abcdefghijklmnopqrstuvwxyz"] # Alfabeto de letrar minusculas ['a','b','c',...,'z']
 alpha_upper = [x for x in "ABCDEFGHIJKLMNOPQRSTUVWXYZ"] # Alfabeto de letras maiusculas ['A','B','C',...,'Z']
